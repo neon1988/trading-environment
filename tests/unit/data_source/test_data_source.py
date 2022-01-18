@@ -78,8 +78,10 @@ class TestDataSource(unittest.TestCase):
         step2 = data_source.take_step()
         step3 = data_source.take_step()
         step4 = data_source.take_step()
+        step5 = data_source.take_step()
 
         self.assertFalse(step1[1])
         self.assertFalse(step2[1])
-        self.assertTrue(step3[1])
+        self.assertFalse(step3[1])
         self.assertTrue(step4[1])
+        self.assertTrue(step5[1])

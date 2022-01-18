@@ -30,3 +30,16 @@ class TestTraidingSimulatorBalance(unittest.TestCase):
         step = simulator.take_step(0, np.array([0, 36000]))
 
         self.assertEqual(4000, step[1]['balance'])
+
+    def test_balance_present_in_last_step(self):
+        simulator = TradingSimulator(steps=3,
+                                     trading_cost_bps=0,
+                                     time_cost_bps=0)
+
+        step1 = simulator.take_step(1, np.array([0, 32000]))
+        step2 = simulator.take_step(0, np.array([0, 35000]))
+        step3 = simulator.take_step(0, np.array([0, 36000]))
+
+        self.assertEqual(0, step1[1]['balance'])
+        self.assertEqual(3000, step2[1]['balance'])
+        self.assertEqual(3000, step3[1]['balance'])

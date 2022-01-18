@@ -59,5 +59,5 @@ class DataSource:
         """Returns data for current trading day and done signal"""
         obs = self.data.iloc[self.offset + self.step].values
         self.step += 1
-        done = self.step >= self.steps
+        done = self.step > self.steps
         return obs, done
