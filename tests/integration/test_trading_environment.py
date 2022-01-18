@@ -23,7 +23,7 @@ class TestTraigingEnvironment(unittest.TestCase):
 
         return df
 
-    def test_step(self):
+    def test_step_returns(self):
         env = TradingEnvironment(data=self.get_data(), steps=3, trading_cost_bps=0.01, time_cost_bps=0.01)
 
         step = env.step(0)
@@ -33,3 +33,24 @@ class TestTraigingEnvironment(unittest.TestCase):
         self.assertEqual(-0.01, step[1])
         self.assertFalse(step[2])
         self.assertEqual(9, len(step[3]))
+
+    def test_last_step_not_empty(self):
+        steps = 3
+
+        env = TradingEnvironment(data=self.get_data(), steps=steps, trading_cost_bps=0.01, time_cost_bps=0.01)
+        env.reset()
+
+        for episode_step in range(steps):
+
+            next_state, reward, done, _ = env.step(1)
+
+            if done:
+                break
+
+        result = env.simulator.result()
+
+        final = result.iloc[-1]
+
+        self.assertEqual(steps, len(result))
+        self.assertEqual(1, final['action'])
+

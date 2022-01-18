@@ -64,16 +64,21 @@ class TradingSimulator:
             if self.is_order_opened():
                 self.close_order()
         else:
-            if start_position != action:
+            if action == 0:
                 if self.is_order_opened():
                     self.close_order()
-
-                if action == 1:
+            elif action == 1:
+                if start_position < 0:
+                    self.close_order()
+                if start_position < 1:
                     self.open_long_order()
-                if action == 2:
+            elif action == 2:
+                if start_position > 0:
+                    self.close_order()
+                if start_position > -1:
                     self.open_short_order()
 
-        time_cost = 0 if self.trades[self.step] else self.time_cost_bps
+        time_cost = 0 if self.positions[self.step] else self.time_cost_bps
 
         self.costs[self.step] = self.costs[self.step] + time_cost
         self.rewards[self.step] -= self.costs[self.step]
