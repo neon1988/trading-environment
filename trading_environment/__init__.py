@@ -1,7 +1,7 @@
 from gym.envs.registration import register
 
 register(
-    id='tradingEnvironment-v0',
-    entry_point='trading_environment.envs:tradingEnvironment',
+    id='TradingEnvironment-v0',
+    entry_point='trading_environment.envs:TradingEnvironment',
     #timestep_limit=60,
 )
