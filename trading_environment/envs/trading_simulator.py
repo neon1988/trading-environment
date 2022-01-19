@@ -5,11 +5,15 @@ import pandas as pd
 class TradingSimulator:
     """ Implements core trading simulator for single-instrument univ """
 
-    def __init__(self, steps=500, trading_cost_bps=0.01, time_cost_bps=0.01):
+    def __init__(self, steps=500, trading_cost_bps=0, time_cost_bps=0,
+                 take_profit_percentage=None,
+                 stop_loss_percentage=None):
         # invariant for object life
         self.trading_cost_bps = trading_cost_bps
         self.time_cost_bps = time_cost_bps
         self.steps = steps
+        self.take_profit_percentage = take_profit_percentage
+        self.stop_loss_percentage = stop_loss_percentage
 
         # change every step
         self.step = 0
@@ -78,6 +82,16 @@ class TradingSimulator:
                 if start_position > -1:
                     self.open_short_order()
 
+        open_position_profit_percentage = self.get_open_position_profit_percentage()
+
+        if self.is_order_opened():
+            if self.take_profit_percentage is not None:
+                if open_position_profit_percentage >= self.take_profit_percentage:
+                    self.close_order()
+            if self.stop_loss_percentage is not None:
+                if open_position_profit_percentage <= -self.stop_loss_percentage:
+                    self.close_order()
+
         time_cost = 0 if self.positions[self.step] else self.time_cost_bps
 
         self.costs[self.step] = self.costs[self.step] + time_cost
@@ -99,7 +113,8 @@ class TradingSimulator:
             'opened_position_price': self.opened_position_price[self.step],
             'trades_count': self.trades_count(),
             'long_trades_count': self.long_trades_count(),
-            'short_trades_count': self.short_trades_count()
+            'short_trades_count': self.short_trades_count(),
+            'open_position_profit_percentage': open_position_profit_percentage
         }
 
         self.step += 1
@@ -164,6 +179,19 @@ class TradingSimulator:
 
     def get_current_price(self) -> float:
         return self.prices[self.step]
+
+    def get_open_position_profit_percentage(self) -> float:
+
+        if self.is_opened_order_long():
+            open_position_profit_percentage = (100 * self.get_current_price() / self.opened_position_price[
+                self.step]) - 100 - self.trading_cost_bps * 2
+        elif self.is_opened_order_short():
+            open_position_profit_percentage = (100 - (100 * self.get_current_price() / self.opened_position_price[
+                self.step])) - self.trading_cost_bps * 2
+        else:
+            open_position_profit_percentage = 0
+
+        return open_position_profit_percentage
 
     def result(self) -> pd.DataFrame:
         """returns current state as pd.DataFrame """

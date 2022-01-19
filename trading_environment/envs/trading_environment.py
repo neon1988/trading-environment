@@ -20,7 +20,9 @@ class TradingEnvironment(gym.Env):
                  data,
                  steps=500,
                  trading_cost_bps=1e-3,
-                 time_cost_bps=1e-4):
+                 time_cost_bps=1e-4,
+                 take_profit_percentage=None,
+                 stop_loss_percentage=None):
         self.steps = steps
         self.trading_cost_bps = trading_cost_bps
         self.time_cost_bps = time_cost_bps
@@ -29,7 +31,10 @@ class TradingEnvironment(gym.Env):
 
         self.simulator = TradingSimulator(steps=self.steps,
                                           trading_cost_bps=self.trading_cost_bps,
-                                          time_cost_bps=self.time_cost_bps)
+                                          time_cost_bps=self.time_cost_bps,
+                                          take_profit_percentage=take_profit_percentage,
+                                          stop_loss_percentage=stop_loss_percentage
+                                          )
 
         self.action_space = spaces.Discrete(3)
 

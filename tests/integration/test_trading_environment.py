@@ -32,7 +32,7 @@ class TestTraigingEnvironment(unittest.TestCase):
         self.assertEqual(3, len(step[0]))
         self.assertEqual(-0.01, step[1])
         self.assertFalse(step[2])
-        self.assertEqual(9, len(step[3]))
+        self.assertEqual(10, len(step[3]))
 
     def test_last_step_not_empty(self):
         steps = 3
