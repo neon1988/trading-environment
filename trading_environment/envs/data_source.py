@@ -27,7 +27,6 @@ class DataSource:
         # self.data['ret_10'] = self.data.close.pct_change(10)
         # self.data['ret_21'] = self.data.close.pct_change(21)
 
-        # self.data = append_indicators(self.data)
         self.data = self.data.fillna(0)
 
         self.data = (self.data.replace((np.inf, -np.inf), np.nan)

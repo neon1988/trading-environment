@@ -22,12 +22,13 @@ class TradingEnvironment(gym.Env):
                  trading_cost_bps=1e-3,
                  time_cost_bps=1e-4,
                  take_profit_percentage=None,
-                 stop_loss_percentage=None):
+                 stop_loss_percentage=None,
+                 normalize=True):
         self.steps = steps
         self.trading_cost_bps = trading_cost_bps
         self.time_cost_bps = time_cost_bps
 
-        self.data_source = DataSource(data=data, steps=self.steps, normalize=True)
+        self.data_source = DataSource(data=data, steps=self.steps, normalize=normalize)
 
         self.simulator = TradingSimulator(steps=self.steps,
                                           trading_cost_bps=self.trading_cost_bps,
