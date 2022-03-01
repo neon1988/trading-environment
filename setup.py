@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='trading_environment',
-      version='0.0.5',
+      version='0.1.0',
       install_requires=[
             'pandas',
             'numpy',

@@ -50,8 +50,7 @@ class DataSource:
 
     def reset(self):
         """Provides starting index for time series and resets step"""
-        high = len(self.data.index) - self.steps
-        self.offset = np.random.randint(low=0, high=high)
+        self.offset = np.random.randint(low=0, high=self.get_high())
         self.step = 0
 
     def take_step(self):
@@ -60,3 +59,9 @@ class DataSource:
         self.step += 1
         done = self.step > self.steps
         return obs, done
+
+    def get_high(self) -> int:
+        return len(self.data.index) - self.steps
+
+    def set_offset(self, offset):
+        self.offset = offset

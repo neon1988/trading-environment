@@ -85,3 +85,14 @@ class TestDataSource(unittest.TestCase):
         self.assertFalse(step3[1])
         self.assertTrue(step4[1])
         self.assertTrue(step5[1])
+
+    def test_get_high(self):
+        data_source = DataSource(steps=3, data=self.get_data(), normalize=False)
+        self.assertTrue(type(data_source.get_high()) == int)
+
+    def test_set_offset(self):
+        data_source = DataSource(steps=3, data=self.get_data(), normalize=False)
+
+        data_source.set_offset(3)
+
+        self.assertEqual(3, data_source.offset)
